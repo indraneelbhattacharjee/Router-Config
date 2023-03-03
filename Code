@@ -1,0 +1,33 @@
+#Configuring a router using python scripts
+
+
+from netmiko import ConnectHandler
+
+# Define the device parameters
+device = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.1.1',
+    'username': 'admin',
+    'password': 'password',
+    'secret': 'enable_password'
+}
+
+# Establish an SSH connection to the device
+net_connect = ConnectHandler(**device)
+
+# Enter enable mode
+net_connect.enable()
+
+# Configure the router
+config_commands = [
+    'interface Loopback0',
+    'ip address 10.0.0.1 255.255.255.0',
+    'no shutdown'
+]
+output = net_connect.send_config_set(config_commands)
+
+# Display the output of the configuration commands
+print(output)
+
+# Disconnect from the device
+net_connect.disconnect()
